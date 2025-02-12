@@ -1,0 +1,29 @@
+streamlit
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+xgboost
+lime
+shap
+beautifulsoup4
+nltk
+spacy
+wordsegment
+wordcloud
+contractions
+pyspellchecker
+scipy
+ipython
+pickleshare
+wordninja 
+
+# # Required NLTK Downloads (inside your script or setup script):
+# nltk.download("punkt")
+# nltk.download("stopwords")
+# nltk.download("wordnet")
+# nltk.download("averaged_perceptron_tagger")
+
+# Required spaCy Model:
+#python -m spacy download en_core_web_sm
