@@ -1,6 +1,12 @@
+# Essential for package installation
+setuptools
+wheel
+pip
+
+# Main dependencies
 streamlit
 pandas
-numpy<1.24
+numpy>=1.21,<1.26
 matplotlib
 seaborn
 scikit-learn
@@ -19,16 +25,6 @@ ipython
 pickleshare
 wordninja 
 
-# # Required NLTK Downloads (inside your script or setup script):
-# nltk.download("punkt")
-# nltk.download("stopwords")
-# nltk.download("wordnet")
-# nltk.download("averaged_perceptron_tagger")
-
-# Required spaCy Model:
-#python -m spacy download en_core_web_sm
-
+# NLP Packages
 spacy==3.5.0
 thinc==8.1.10
-en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz
-
