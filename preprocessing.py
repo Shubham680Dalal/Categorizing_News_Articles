@@ -28,12 +28,14 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
+import os
+os.system("python -m spacy download en_core_web_sm")
 import spacy
+nlp = spacy.load("en_core_web_sm")
+
 from wordsegment import load, segment
 from wordcloud import WordCloud
 
-
-nlp = spacy.load("en_core_web_sm")
 nltk.download("punkt")
 nltk.download("punkt_tab")
 nltk.download("stopwords")
