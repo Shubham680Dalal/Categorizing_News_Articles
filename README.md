@@ -78,7 +78,7 @@ I implemented **Stratified K-Fold Cross-Validation (5-Fold)** to ensure a balanc
 ## 🎯 Deployment: Streamlit App  
 Finally, I deployed our trained model using **Streamlit** to allow users to classify news articles interactively.  
 
-🔗 **Live Demo:** [Streamlit Application](<your-streamlit-link-here>)  
+🔗 **Live Demo:** [Streamlit Application](<https://categorizingnewsarticles-3egwlobf33axzffhhpcqyc.streamlit.app/>)  
 
 ---
 
