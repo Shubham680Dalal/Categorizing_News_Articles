@@ -26,8 +26,8 @@ pickleshare
 wordninja 
 
 # NLP Packages
-spacy==3.5.0
-
-streamlit==1.18.1
-streamlit_lottie==0.0.3
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
+spacy
+subprocess
+streamlit
+#streamlit_lottie==0.0.3
+#https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
