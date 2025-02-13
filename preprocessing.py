@@ -11,7 +11,7 @@ import time
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import shap
 import wordninja 
-
+from bs4 import BeautifulSoup
 from scipy import stats
 import itertools
 
@@ -35,9 +35,12 @@ from wordcloud import WordCloud
 
 nlp = spacy.load("en_core_web_sm")
 nltk.download("punkt")
+nltk.download("punkt_tab")
 nltk.download("stopwords")
 nltk.download("wordnet")
+nltk.download('omw-1.4')
 nltk.download('averaged_perceptron_tagger')
+nltk.download('averaged_perceptron_tagger_eng')
 load()
 
 special_chars = r"!\"#$%&\'()*+,-/:;<=>?@[\\]^_`{|}~"
@@ -98,22 +101,6 @@ class TextPreprocessor:
         tokens = [self.lemmatizer.lemmatize(word) for word in tokens]
         return tokens
 
-    def build_vocab(self, texts):
-        """Build vocabulary from a list of tokenized texts."""
-        for tokens in texts:
-            self.vocab.update(tokens)
-
-        # Identify common words (occurring in more than common_threshold)
-        total_docs = len(texts)
-        self.common_words = {word for word, count in self.vocab.items() if count > self.common_threshold}
-
-        # Identify rare words (appearing less than rare_threshold times)
-        self.rare_words = {word for word, count in self.vocab.items() if count < self.rare_threshold}
-
-    def replace_common_rare(self, tokens):
-        """Replace common words with <COMMON> and rare words with <UNK>."""
-        return [word for word in tokens if word not in self.rare_words and word not in self.common_words]
-
     def remove_stopwords(self, tokens):
         """Remove stopwords from tokens."""
         return [word for word in tokens if word not in self.stop_words]
@@ -124,14 +111,10 @@ class TextPreprocessor:
         df[column] = df[column].apply(self.clean_text)
         df["tokens"] = df[column].apply(self.tokenize_and_lemmatize)
 
-        # Build vocab after tokenization
-        self.build_vocab(df["tokens"].tolist())
-
         # Replace common/rare words and remove stopwords
-        df["tokens"] = df["tokens"].apply(self.replace_common_rare)
         df["tokens"] = df["tokens"].apply(self.remove_stopwords)
 
-        return 
+        return df
     
 
 def filter_numeric(data,coll):
@@ -177,3 +160,62 @@ def transform_test(test_data, col, vectorizer):
     dd[col] = dd[col].apply(lambda x: " ".join(x))
     test_vectors = vectorizer.transform(dd[col])
     return pd.DataFrame(test_vectors.toarray(),columns=vectorizer.get_feature_names_out())
+
+
+def feature_revtransform(feature,scaler,numeric_cols,val):
+    try:
+        feature_index=numeric_cols.index(feature)
+        feature_mean = scaler.mean_[feature_index]
+        feature_std = scaler.scale_[feature_index]
+        val=feature_mean+(val*feature_std)
+        return val
+    except:
+        return val
+
+## Model Interpretability
+def extract_values_and_operators(st):
+    # Match standalone numbers (including decimals and negatives) and comparison operators
+    pattern = r"(?<!\w)-?\d+\.\d+|[<>=]+"
+    matches = re.findall(pattern, st)
+    # Convert numbers to float where applicable
+    result = [float(m) if re.match(r"-?\d+\.\d+", m) else m for m in matches]
+    return result
+
+def update_lime_explanation(lime_exp, scaler, numeric_cols):
+    """
+    Update LIME explanation to use reverse-transformed values.
+    """
+    updated_explanation = []
+    for condition, contrib in lime_exp.as_list():
+        feature_name = re.search(r'([a-zA-Z_][a-zA-Z0-9_\.]*)\s*[<>=]', condition).group(1)  # Extract the feature name
+        if feature_name in numeric_cols:
+            # Extract numeric bounds and reverse-transform them
+
+            bounds = extract_values_and_operators(condition)
+            if len(bounds)==2:
+                bounds[1]=feature_revtransform(feature_name,scaler,numeric_cols,bounds[1])
+                updated_condition=feature_name+' '+str(bounds[0])+' '+str(bounds[1])
+                updated_explanation.append((updated_condition, contrib))
+            elif len(bounds)==4:
+                bounds[0]=feature_revtransform(feature_name,scaler,numeric_cols,bounds[0])
+                bounds[3]=feature_revtransform(feature_name,scaler,numeric_cols,bounds[3])
+                updated_condition=str(bounds[0])+' '+str(bounds[1])+' '+feature_name+' '+str(bounds[2])+' '+str(bounds[3])
+                updated_explanation.append((updated_condition, contrib))
+            else:
+                updated_explanation.append((condition, contrib))
+        else:
+            # Non-numeric features remain unchanged
+            updated_explanation.append((condition, contrib))
+    return updated_explanation
+
+def show_lime_with_original_values(lime_exp, scaler, numeric_cols):
+
+    updated_explanation = update_lime_explanation(lime_exp, scaler, numeric_cols)
+
+    df_explanation = pd.DataFrame(updated_explanation, columns=["Feature Condition", "Contribution"])
+
+    df_explanation["Absolute Contribution"] = df_explanation["Contribution"].abs()
+    df_explanation = df_explanation.sort_values(by="Absolute Contribution", ascending=False)
+
+    df_explanation = df_explanation.drop(columns=["Absolute Contribution"])
+    return df_explanation
