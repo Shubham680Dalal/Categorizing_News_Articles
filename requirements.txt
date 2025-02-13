@@ -1,4 +1,4 @@
-streamlit==1.18.1
+streamlit
 pandas
 numpy
 matplotlib
@@ -19,9 +19,9 @@ ipython
 pickleshare
 wordninja
 
-spacy==3.5.0
-thinc==8.1.10
+# spacy==3.5.0
+# thinc==8.1.10
 
-# SpaCy Model
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
+# # SpaCy Model
+# https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
 #en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0.tar.gz

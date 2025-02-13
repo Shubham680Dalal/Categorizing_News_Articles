@@ -30,11 +30,9 @@ from nltk.stem import WordNetLemmatizer
 from nltk import pos_tag
 import os
 #os.system("python -m spacy download en_core_web_sm")
-import spacy
-#from spacy.cli import download
-
-
-nlp = spacy.load("en_core_web_sm")
+# import spacy
+# #from spacy.cli import download
+# nlp = spacy.load("en_core_web_sm")
 
 
 
