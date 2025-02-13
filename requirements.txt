@@ -6,7 +6,7 @@ pip
 # Main dependencies
 
 pandas
-numpy>=1.21,<1.26
+numpy #>=1.21,<1.26
 matplotlib
 seaborn
 scikit-learn
