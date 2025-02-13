@@ -4,7 +4,7 @@ wheel
 pip
 
 # Main dependencies
-streamlit
+
 pandas
 numpy>=1.21,<1.26
 matplotlib
@@ -27,4 +27,7 @@ wordninja
 
 # NLP Packages
 spacy==3.5.0
-thinc==8.1.10
+
+streamlit==1.18.1
+streamlit_lottie==0.0.3
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
