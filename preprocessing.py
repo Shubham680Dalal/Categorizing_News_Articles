@@ -31,13 +31,11 @@ from nltk import pos_tag
 import os
 #os.system("python -m spacy download en_core_web_sm")
 import spacy
-from spacy.cli import download
+#from spacy.cli import download
 
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+
+nlp = spacy.load("en_core_web_sm")
+
 
 
 from wordsegment import load, segment
