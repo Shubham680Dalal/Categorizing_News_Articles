@@ -6,7 +6,7 @@ pip
 # Main dependencies
 
 pandas
-numpy #>=1.21,<1.26
+numpy 
 matplotlib
 seaborn
 scikit-learn
@@ -28,6 +28,6 @@ wordninja
 # NLP Packages
 spacy==3.5.0
 subprocess
-streamlit
-#streamlit_lottie==0.0.3
-#https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
+streamlit==1.18.1
+streamlit_lottie==0.0.3
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
